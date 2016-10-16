@@ -16,3 +16,5 @@ Calculate partial series for any given note
 - finds neared note in equal temperment
 - calculates cents deviation from nearest note in equal temperment
 - allows for octave stretch
+
+Credit goes to Michael Norris for his great [harmonic series calculator](http://www.michaelnorris.info/musictheory/harmonic-series-calculator), who's JS code I used as a model for creating my own swift code. 
