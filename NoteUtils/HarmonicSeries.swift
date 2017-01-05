@@ -9,15 +9,15 @@
 import Foundation
 
 
-class Partial: CustomStringConvertible, CustomDebugStringConvertible  {
+public class Partial: CustomStringConvertible, CustomDebugStringConvertible, Equatable  {
     
-    var nearestNote:Note
-    var frequency:Double
-    var centsDetuned:Double
-    var microtonalDeviation:String
-    var number:Int
+    public private(set) var nearestNote:Note
+    public private(set) var frequency:Double
+    public private(set) var centsDetuned:Double
+    public private(set) var microtonalDeviation:String
+    public private(set) var number:Int
     
-    init(nearestNote:Note, frequency:Double, centsDetuned:Double, microtonalDeviation:String, number:Int) {
+    public init(nearestNote:Note, frequency:Double, centsDetuned:Double, microtonalDeviation:String, number:Int) {
         self.nearestNote = nearestNote
         self.frequency = frequency
         self.centsDetuned = centsDetuned
@@ -26,7 +26,7 @@ class Partial: CustomStringConvertible, CustomDebugStringConvertible  {
         
     }
     
-    var description:String {
+    public var description:String {
                 
         if (centsDetuned > 0) {
             return String(format:"(%d) %0.1f ~ %@ + %1.0f", number, frequency, nearestNote.description, centsDetuned)
@@ -40,7 +40,7 @@ class Partial: CustomStringConvertible, CustomDebugStringConvertible  {
         
     }
     
-    var debugDescription:String {
+    public var debugDescription:String {
         if (microtonalDeviation != "") {
             return String(format:"%@, micro = %@", description, microtonalDeviation)
         }
@@ -49,21 +49,25 @@ class Partial: CustomStringConvertible, CustomDebugStringConvertible  {
         }
     }
     
+    public static func ==(left: Partial, right: Partial) -> Bool {
+        return left.number == right.number
+    }
+    
 }
 
-class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
+public class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
     
-    private(set) var fundamental:Note
-    private(set) var partialStretch:Double
-    private(set) var numberOfPartials:Int
-    private(set) var partials:[Partial]
+    public private(set) var fundamental:Note
+    public private(set) var partialStretch:Double
+    public private(set) var numberOfPartials:Int
+    public private(set) var partials:[Partial]
     
-    func getPartial(_ num:Int) -> Partial {
+    public func getPartial(_ num:Int) -> Partial {
         assert(num > 0 && num <= partials.count)
         return partials[num-1]
     }
     
-    var description:String {
+    public var description:String {
         
         var str:String = String(format:"%@ %d => ", fundamental.description, numberOfPartials)
         
@@ -75,7 +79,7 @@ class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
         return str
     }
     
-    var debugDescription:String {
+    public var debugDescription:String {
         
         var str:String = String(format:"%@ %d =>\n", fundamental.description, numberOfPartials)
         
@@ -88,7 +92,7 @@ class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
         return str
     }
     
-    init(_ fundamental: Note, _ numberOfPartials:Int, _ partialStretch:Double = 1.0) {
+    public init(_ fundamental: Note, _ numberOfPartials:Int, _ partialStretch:Double = 1.0) {
         
         self.partials = [Partial]()
         self.fundamental = fundamental
@@ -155,14 +159,14 @@ class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
                 microtonalDeviation = "-"
             }
             
-            NSLog("Partial %d", i)
+            //NSLog("Partial %d", i)
             
-            NSLog("%@ : %d", noteName, partialOctave)
+            //NSLog("%@ : %d", noteName, partialOctave)
             
             let keyboardNumber:Int = NoteConverter.noteAndOctaveToKeyboardNumber(note: noteName, octave: partialOctave)
             let nearestNote:Note = Note(keyboardNum: keyboardNumber)
             
-            NSLog(nearestNote.debugDescription)
+            //NSLog(nearestNote.debugDescription)
             
             let partial:Partial = Partial(
                 nearestNote: nearestNote,
@@ -176,6 +180,7 @@ class HarmonicSeries: CustomStringConvertible, CustomDebugStringConvertible  {
             
         }
         
+        NSLog(debugDescription)
     }
     
 }

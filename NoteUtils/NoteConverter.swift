@@ -22,7 +22,7 @@
 
 import Foundation
 
-class NoteConverter {
+public class NoteConverter {
     
     static let noteToOffset: [String: Int] = [
         "C" : 0,
@@ -87,18 +87,18 @@ class NoteConverter {
     ]
     
     // Note and octave (C3) to midi note number (21-108)
-    static func noteAndOctaveToMidiNoteNumber(note:String, octave:Int) -> Int {
+    public static func noteAndOctaveToMidiNoteNumber(note:String, octave:Int) -> Int {
         return octave * 12 + 12 + noteToOffset[note]!
     }
     
     // Note and octave (C4) to keyboard number (1-88)
-    static func noteAndOctaveToKeyboardNumber(note:String, octave:Int) -> Int {
+    public static func noteAndOctaveToKeyboardNumber(note:String, octave:Int) -> Int {
         let midiNoteNumber:Int = noteAndOctaveToMidiNoteNumber(note: note, octave: octave)
         return midiNoteNumberToKeyboardNumber(noteNumber: midiNoteNumber)
     }
     
     // Midi note number to note and octave (C3)
-    static func midiNoteNumberToNoteAndOctave(noteNumber:Int) -> String {
+    public static func midiNoteNumberToNoteAndOctave(noteNumber:Int) -> String {
         let octave:Int = Int(noteNumber / 12) - 1
         let offest:Int = noteNumber % 12
         let noteChar:String = offsetToNote[offest]!
@@ -106,44 +106,44 @@ class NoteConverter {
     }
     
     // Midi note number to (C, 3) as tuple
-    static func midiNoteNumberToNoteAndOctaveAsTuple(noteNumber:Int) -> (String, Int) {
+    public static func midiNoteNumberToNoteAndOctaveAsTuple(noteNumber:Int) -> (String, Int) {
         let octaveAndOffset:(Int, Int) = midiNoteNumberToOctaveAndOffset(noteNumber:noteNumber)
         let noteChar:String = offsetToNote[octaveAndOffset.1]!
         return (noteChar, octaveAndOffset.0);
     }
     
     // Midi note number to note and keyboard number (C60)
-    static func midiNoteNumberToNoteAndKeyboardNumber(noteNumber:Int) -> String {
+    public static func midiNoteNumberToNoteAndKeyboardNumber(noteNumber:Int) -> String {
         let offest:Int = noteNumber % 12
         let noteChar:String = offsetToNote[offest]!
         return String(format: "%@%d", noteChar, noteNumber - 20)
     }
     
     // Midi note number to note and keyboard number as typle (C, 60)
-    static func midiNoteNumberToNoteAndKeyboardNumberAsTuple(noteNumber:Int) -> (String, Int) {
+    public static func midiNoteNumberToNoteAndKeyboardNumberAsTuple(noteNumber:Int) -> (String, Int) {
         let offset:Int = Int(noteNumber % 12)
         let noteChar:String = offsetToNote[offset]!
         return (noteChar, midiNoteNumberToKeyboardNumber(noteNumber: noteNumber));
     }
     
     // Midi note number to keyboard number: 21 -> 1, 108 -> 88
-    static func midiNoteNumberToKeyboardNumber(noteNumber:Int) -> Int {
+    public static func midiNoteNumberToKeyboardNumber(noteNumber:Int) -> Int {
         return noteNumber - 20
     }
     
     // Keyboard number to midi note number: 1 -> 21, 88 -> 108
-    static func keyboardNumberToMidiNoteNumber(keyboardNumber:Int) -> Int {
+    public static func keyboardNumberToMidiNoteNumber(keyboardNumber:Int) -> Int {
         return keyboardNumber + 20
     }
     
     // Keyboard number to midi note number, octave, and note name
-    static func keyboardNumberToAll(keyboardNumber:Int) -> Dictionary<String, Any> {
+    public static func keyboardNumberToAll(keyboardNumber:Int) -> Dictionary<String, Any> {
         let midiNoteNumber: Int = keyboardNumberToMidiNoteNumber(keyboardNumber: keyboardNumber)
         return midiNoteNumberToAll(noteNumber: midiNoteNumber)
     }
     
     // Midi note number to keyboard number, octave, and note name
-    static func midiNoteNumberToAll(noteNumber:Int) -> Dictionary<String, Any> {
+    public static func midiNoteNumberToAll(noteNumber:Int) -> Dictionary<String, Any> {
         
         let octaveAndOffset:(Int, Int) = midiNoteNumberToOctaveAndOffset(noteNumber:noteNumber)
         let noteChar:String = offsetToNote[octaveAndOffset.1]!
@@ -158,13 +158,13 @@ class NoteConverter {
         ];
     }
     
-    static func midiNoteNumberToOctaveAndOffset(noteNumber: Int) -> (Int, Int) {
+    public static func midiNoteNumberToOctaveAndOffset(noteNumber: Int) -> (Int, Int) {
         let octave:Int = Int(noteNumber / 12) - 1
         let offset:Int = noteNumber % 12
         return (octave, offset)
     }
     
-    static func keyboardNumberToOctaveAndOffset(keyboardNumber:Int) -> (Int, Int) {
+    public static func keyboardNumberToOctaveAndOffset(keyboardNumber:Int) -> (Int, Int) {
         let midiNoteNumber:Int = keyboardNumberToMidiNoteNumber(keyboardNumber: keyboardNumber)
         return midiNoteNumberToOctaveAndOffset(noteNumber: midiNoteNumber)
     }
@@ -179,22 +179,22 @@ class NoteConverter {
     static let referencePitch_KeyboardNumber:Double = 49.0
 
     // Equal temperment frequency hertz for keyboard number
-    static func pitchForKeyboardNumber_EqualTemperment(keyboardNumber:Int) -> Double {
+    public static func pitchForKeyboardNumber_EqualTemperment(keyboardNumber:Int) -> Double {
         let pitchHz:Double = referencePitch_Frequency * pow(ratioEqualTemperment12Tone, Double(keyboardNumber) - referencePitch_KeyboardNumber)
         return pitchHz
     }
     
     // Octaves 0-8
-    static func baseFrequencyForOctave(octave:Int) -> Double {
+    public static func baseFrequencyForOctave(octave:Int) -> Double {
         return (27.5 * pow(2.0, Double(octave)))
     }
     
     /*
-    static func pitchForMidiNoteNumber_Just(noteNumber:Int) -> Double {
+    public static func pitchForMidiNoteNumber_Just(noteNumber:Int) -> Double {
         return pitchForKeyboardNumber_Just(keyboardNumber: midiNoteNumberToKeyboardNumber(noteNumber: noteNumber))
     }
     
-    static func pitchForKeyboardNumber_Just(keyboardNumber:Int) -> Double {
+    public static func pitchForKeyboardNumber_Just(keyboardNumber:Int) -> Double {
 
         let (octave, offset) = keyboardNumberToOctaveAndOffset(keyboardNumber: keyboardNumber)
         
